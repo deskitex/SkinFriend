@@ -1,0 +1,8 @@
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="@color/surface"/> <!-- Warna latar belakang -->
+    <corners android:radius="16dp"/> <!-- Sudut melengkung -->
+    <stroke
+        android:color="@color/surfaceStroke">
+    </stroke>  <!-- Warna garis tepi -->
+    <stroke android:width="2dp"/> <!-- Lebar garis tepi -->
+</shape>
