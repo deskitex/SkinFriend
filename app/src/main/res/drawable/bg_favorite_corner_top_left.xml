@@ -1,0 +1,8 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+        <item android:right="1dp"  >
+            <shape android:shape="rectangle">
+                <solid android:color="@color/surface"/> <!-- Warna latar belakang -->
+                <corners android:topLeftRadius="10dp"/> <!-- Sudut latar belakang -->
+            </shape>
+        </item>
+</layer-list>

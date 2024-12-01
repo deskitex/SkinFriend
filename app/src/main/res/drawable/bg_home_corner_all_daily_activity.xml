@@ -4,14 +4,15 @@
     <item>
         <shape android:shape="rectangle">
             <solid android:color="#50121212"/> <!-- Warna shadow (hitam transparan) -->
-            <corners android:radius="16dp"/> <!-- Sudut shadow -->
+            <corners android:radius="10dp"/> <!-- Sudut shadow -->
         </shape>
     </item>
     <!-- Background -->
     <item android:bottom="4dp" android:left="1dp" android:right="1dp" android:top="1dp" >
         <shape android:shape="rectangle">
             <solid android:color="@android:color/white"/> <!-- Warna latar belakang -->
-            <corners android:radius="16dp"/> <!-- Sudut latar belakang -->
+            <corners android:radius="10dp"/> <!-- Sudut latar belakang -->
         </shape>
     </item>
 </layer-list>
+
