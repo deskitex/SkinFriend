@@ -1,0 +1,9 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+<item
+    >
+    <shape android:shape="rectangle">
+        <corners android:radius="8dp"/> <!-- Sudut latar belakang -->
+        <stroke android:width="2dp" android:color="@color/primary_text" /> <!-- Garis tepi -->
+    </shape>
+</item>
+</layer-list>
