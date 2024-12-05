@@ -27,7 +27,7 @@ class SkincareRepository private constructor(
      suspend fun uploadImage(imageFile: File): SkincareResponse {
             val requestImageFile = imageFile.asRequestBody("image/jpeg".toMediaType())
             val multipartBody = MultipartBody.Part.createFormData(
-                "photo",
+                "file",
                 imageFile.name,
                 requestImageFile
             )

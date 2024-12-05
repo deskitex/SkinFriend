@@ -13,6 +13,7 @@ import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
@@ -21,7 +22,10 @@ import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.viewModels
 import com.example.skinfriend.databinding.ActivityCameraBinding
+import com.example.skinfriend.ui.model.CameraViewModel
+import com.example.skinfriend.ui.model.ViewModelFactory
 import com.example.skinfriend.util.*
 import com.yalantis.ucrop.UCrop
 import java.io.File
@@ -32,6 +36,10 @@ class CameraActivity : AppCompatActivity() {
     private var imageCapture: ImageCapture? = null
 
     private var currentImageUri: Uri? = null
+
+    private val cameraViewModel: CameraViewModel by viewModels() {
+        ViewModelFactory.getInstance(this)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,6 +54,7 @@ class CameraActivity : AppCompatActivity() {
                 else CameraSelector.DEFAULT_BACK_CAMERA
             startCamera()
         }
+        //Menekan tombol capture akan menjalankan fungsi takePhoto
         binding.captureImage.setOnClickListener { takePhoto() }
     }
 
@@ -104,6 +113,7 @@ class CameraActivity : AppCompatActivity() {
                     val intent = Intent()
                     val getUri = output.savedUri
                     setResult(CAMERAX_RESULT, intent)
+                    //Setelah mendapatkan uri photo menjalankan fungsi start crop
                     getUri?.let { startCrop(it) }
                 }
 
@@ -187,13 +197,19 @@ class CameraActivity : AppCompatActivity() {
         if (result.resultCode == RESULT_OK) {
             val resultUri = UCrop.getOutput(result.data!!)
             resultUri?.let {
-                Log.d(TAG, "startCrop: $it")
-                currentImageUri = it
-                val intent = Intent(this, ResultActivity::class.java).apply {
-                    putExtra(EXTRA_CAMERAX_IMAGE, it)
+                //Setelah berhasil crop jalankan fungsi upload image dari uri hasil crop
+                cameraViewModel.uploadImage(it, this)
+                cameraViewModel.predictionResult.observe(this){ predictions->
+                    predictions?.let {
+                        val intent = Intent(this, ResultActivity::class.java).apply {
+                            putExtra(ResultActivity.OILY_RESULT, "${it.oily}")
+                            putExtra(ResultActivity.SENSITIVE_RESULT, "${it.sensitive}")
+                            putExtra(ResultActivity.DRY_RESULT, "${it.dry}")
+                            putExtra(ResultActivity.NORMAL_RESULT, "${it.normal}")
+                        }
+                        startActivity(intent)
+                    }
                 }
-                startActivity(intent)
-                finish()
             }
         } else if (result.resultCode == UCrop.RESULT_ERROR) {
             Log.d(TAG, "Crop Error: ")

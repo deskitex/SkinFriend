@@ -21,7 +21,7 @@ class CameraViewModel(private val repository: SkincareRepository) : ViewModel() 
     val predictionResult: LiveData<Predictions> = _predictionResult
 
     private val _recommendationResult = MutableLiveData<List<RecommendationsItem>>()
-    val recommendationsResult: LiveData<List<RecommendationsItem>> = _recommendationResult
+    val recommendationResult: LiveData<List<RecommendationsItem>> = _recommendationResult
 
     private val _loadingState = MutableLiveData<Boolean>()
     val loadingState: LiveData<Boolean> = _loadingState
@@ -29,7 +29,6 @@ class CameraViewModel(private val repository: SkincareRepository) : ViewModel() 
     fun uploadImage(uri: Uri, context: Context) {
         viewModelScope.launch {
             try {
-
                 // Ubah URI ke file
                 val imageFile = uriToFile(uri, context).reduceFileImage()
 
@@ -39,6 +38,9 @@ class CameraViewModel(private val repository: SkincareRepository) : ViewModel() 
                 // Kirim hasil ke LiveData
                 _predictionResult.value = response.predictions
                 _recommendationResult.value = response.recommendations
+                Log.d("SkincareViewModel", "Response: $response")
+                Log.d("SkincareViewModel", "Predictions: ${response.predictions}")
+                Log.d("SkincareViewModel", "Recommendations: ${response.recommendations}")
             } catch (e: Exception) {
                 Log.e("SkincareViewModel", "Error uploading image: ${e.message}")
             } finally {
