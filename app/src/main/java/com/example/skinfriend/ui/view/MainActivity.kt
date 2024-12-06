@@ -5,7 +5,6 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -18,12 +17,15 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.skinfriend.R
 import com.example.skinfriend.databinding.ActivityMainBinding
+import com.example.skinfriend.helper.SessionManager
 import com.example.skinfriend.ui.view.CameraActivity.Companion.CAMERAX_RESULT
+import com.example.skinfriend.ui.view.fragment.LoginActivity
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private var currentImageUri: Uri? = null
+    private lateinit var sessionManager: SessionManager
 
     private val requestPermissionLauncher =
         registerForActivityResult(
@@ -42,9 +44,17 @@ class MainActivity : AppCompatActivity() {
             REQUIRED_PERMISSION
         ) == PackageManager.PERMISSION_GRANTED
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Inisialisasi SessionManager
+        sessionManager = SessionManager(this)
+
+        // Cek apakah pengguna sudah login
+        if (!sessionManager.isLoggedIn()) {
+            navigateToLogin()
+            return
+        }
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -66,6 +76,21 @@ class MainActivity : AppCompatActivity() {
         navView.setupWithNavController(navController)
 
         binding.fabCamera.setOnClickListener { startCameraX() }
+
+        // Tombol logout di profil atau menu lain
+        setupLogoutListener()
+    }
+
+    private fun setupLogoutListener() {
+        // Contoh: Tambahkan listener logout di salah satu fragmen atau tombol
+        binding.navView.setOnNavigationItemSelectedListener { item ->
+            if (item.itemId == R.id.navigation_profile) {
+                // Misalnya di profil terdapat tombol logout
+                sessionManager.clearSession()
+                navigateToLogin()
+            }
+            true
+        }
     }
 
     private fun startCameraX() {
@@ -78,12 +103,17 @@ class MainActivity : AppCompatActivity() {
     ) {
         if (it.resultCode == CAMERAX_RESULT) {
             currentImageUri = it.data?.getStringExtra(CameraActivity.EXTRA_CAMERAX_IMAGE)?.toUri()
-//            showImage()
         }
+    }
+
+    private fun navigateToLogin() {
+        val intent = Intent(this, LoginActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
+        finish()
     }
 
     companion object {
         private const val REQUIRED_PERMISSION = Manifest.permission.CAMERA
     }
-
 }

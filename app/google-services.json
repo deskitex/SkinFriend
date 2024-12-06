@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "705302613426",
+    "project_id": "testfirebase3-93477",
+    "storage_bucket": "testfirebase3-93477.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:705302613426:android:e5951e69cadd7fe43528ab",
+        "android_client_info": {
+          "package_name": "com.example.skinfriend"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDTG2pCEN1jBLjuhMZ0T-ZPhzijzj5qQ5g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
