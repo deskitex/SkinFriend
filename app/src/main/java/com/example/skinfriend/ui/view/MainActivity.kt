@@ -19,7 +19,6 @@ import com.example.skinfriend.R
 import com.example.skinfriend.databinding.ActivityMainBinding
 import com.example.skinfriend.helper.SessionManager
 import com.example.skinfriend.ui.view.CameraActivity.Companion.CAMERAX_RESULT
-import com.example.skinfriend.ui.view.fragment.LoginActivity
 
 class MainActivity : AppCompatActivity() {
 
@@ -47,14 +46,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Inisialisasi SessionManager
         sessionManager = SessionManager(this)
-
-        // Cek apakah pengguna sudah login
-        if (!sessionManager.isLoggedIn()) {
-            navigateToLogin()
-            return
-        }
+        checkLoginStatus()
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -76,20 +69,25 @@ class MainActivity : AppCompatActivity() {
         navView.setupWithNavController(navController)
 
         binding.fabCamera.setOnClickListener { startCameraX() }
-
-        // Tombol logout di profil atau menu lain
         setupLogoutListener()
     }
 
+    private fun checkLoginStatus() {
+        if (!sessionManager.isLoggedIn()) {
+            startActivity(Intent(this, LoginActivity::class.java))
+            finish()
+        }
+    }
+
     private fun setupLogoutListener() {
-        // Contoh: Tambahkan listener logout di salah satu fragmen atau tombol
-        binding.navView.setOnNavigationItemSelectedListener { item ->
+        binding.navView.setOnItemSelectedListener { item ->
             if (item.itemId == R.id.navigation_profile) {
-                // Misalnya di profil terdapat tombol logout
                 sessionManager.clearSession()
                 navigateToLogin()
+                true
+            } else {
+                false
             }
-            true
         }
     }
 

@@ -36,11 +36,36 @@
                 android:id="@+id/loginText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/text_login"
+                android:text="@string/text_register"
                 android:textAlignment="center"
                 android:textColor="@color/purple"
                 android:textSize="36sp"
                 android:textStyle="bold" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/nameContainer"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:textColorHint="@color/black"
+                app:boxStrokeColor="@color/purple_500"
+                app:boxStrokeWidth="2dp"
+                app:boxStrokeWidthFocused="3dp"
+                app:hintTextColor="@color/black"
+                app:startIconDrawable="@drawable/ic_person"
+                app:startIconTint="@color/black">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/label_name"
+                    android:inputType="text"
+                    android:lines="1"
+                    android:textColor="@color/black"
+                    android:textColorHighlight="@color/black" />
+            </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/emailContainer"
@@ -99,7 +124,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:text="@string/text_login"
+                android:text="@string/text_register"
                 android:textAlignment="center"
                 android:textColor="@color/white"
                 android:backgroundTint="@color/purple"
@@ -107,34 +132,6 @@
                 app:iconPadding="8dp"
                 app:iconTint="@null"
                 app:rippleColor="@color/purple_200" />
-
-            <TextView
-                android:id="@+id/tv_or"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="Or"
-                android:textAlignment="center"
-                android:textColor="@color/purple"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_loginGoogle"
-                style="@style/Widget.Material3.Button.IconButton.Outlined"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="@string/login_with_google"
-                android:textAlignment="center"
-                android:textColor="@color/purple"
-                android:textSize="16sp"
-                app:icon="@drawable/ic_google"
-                app:iconGravity="textStart"
-                app:iconPadding="8dp"
-                app:iconTint="@null"
-                app:rippleColor="@color/purple_200"
-                app:strokeColor="@color/purple" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
@@ -143,7 +140,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="@string/noRegister"
+        android:text="@string/haveAccount"
         android:textAlignment="center"
         android:textColor="@color/purple"
         android:textSize="14sp" />

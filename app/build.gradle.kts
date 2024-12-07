@@ -3,6 +3,8 @@ plugins {
     alias(libs.plugins.kotlin.android)
     id("com.google.devtools.ksp")
     alias(libs.plugins.google.gms.google.services)
+    id("kotlin-parcelize")
+
 }
 
 android {
@@ -12,11 +14,16 @@ android {
     defaultConfig {
         applicationId = "com.example.skinfriend"
         minSdk = 24
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField(
+            "String",
+            "BASE_URL",
+            "\"https://capstone-skinfriend.et.r.appspot.com/api/\""
+        )
     }
 
     buildTypes {
@@ -37,6 +44,7 @@ android {
     }
     buildFeatures {
         viewBinding = true
+        buildConfig = true
     }
 }
 
@@ -110,5 +118,9 @@ dependencies {
     implementation("androidx.camera:camera-camera2:1.3.0")
     implementation("androidx.camera:camera-lifecycle:1.3.0")
     implementation("androidx.camera:camera-view:1.3.0")
+
+
+//Material Design :
+    implementation("com.google.android.material:material:1.9.0")
 
 }
