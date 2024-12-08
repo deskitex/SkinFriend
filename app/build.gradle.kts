@@ -4,7 +4,6 @@ plugins {
     id("com.google.devtools.ksp")
     alias(libs.plugins.google.gms.google.services)
     id("kotlin-parcelize")
-
 }
 
 android {
@@ -22,8 +21,15 @@ android {
         buildConfigField(
             "String",
             "BASE_URL",
-            "\"https://capstone-skinfriend.et.r.appspot.com/api/\""
+            "\"https://capstone-skinfriend.et.r.appspot.com/api/\"",
+
         )
+        buildConfigField(
+            "String",
+            "WEB_CLIENT_ID",
+            "\"119416210380-b197q9htkd41u8rq50pp9k4dufkb05ui.apps.googleusercontent.com\"",
+
+            )
     }
 
     buildTypes {
@@ -59,7 +65,6 @@ dependencies {
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
     implementation(libs.androidx.activity)
-    implementation(libs.firebase.auth)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -122,5 +127,19 @@ dependencies {
 
 //Material Design :
     implementation("com.google.android.material:material:1.9.0")
+
+
+    // Firebase Authentication
+    implementation(libs.firebase.auth)
+
+    // Credential Manager
+    implementation ("androidx.credentials:credentials:1.3.0")
+//    implementation("androidx.credentials:credentials:1.5.0-alpha05")
+    implementation(libs.androidx.credentials.play.services.auth)
+    implementation(libs.googleid)
+    //Firebase
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.play.services.auth)
+    implementation(libs.google.firebase.auth)
 
 }

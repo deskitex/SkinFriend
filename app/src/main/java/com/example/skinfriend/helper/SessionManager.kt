@@ -35,7 +35,7 @@ class SessionManager(context: Context) {
         return preferences.getBoolean(KEY_IS_LOGGED_IN, false)
     }
 
-    fun getToken(): String? {
+    fun getToken(): String? {3
         return preferences.getString(KEY_TOKEN, null)
     }
 
