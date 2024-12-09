@@ -21,7 +21,6 @@ class ProfileFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // Inflate the layout and initialize binding
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -29,17 +28,14 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Initialize session manager
         sessionManager = SessionManager(requireContext())
 
-        // Set up logout button listener
         binding.btnLogout.setOnClickListener {
             setupLogoutListener()
         }
     }
 
     private fun setupLogoutListener() {
-        // Clear session and navigate to login
         sessionManager.clearSession()
         navigateToLogin()
     }
@@ -52,7 +48,7 @@ class ProfileFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null // Prevent memory leaks
+        _binding = null
     }
 }
 
