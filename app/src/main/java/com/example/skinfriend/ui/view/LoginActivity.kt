@@ -2,7 +2,6 @@ package com.example.skinfriend.ui.view
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.util.Patterns
 import android.view.View
 import android.widget.Toast
@@ -145,8 +144,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun performLoginGoogle() {
-
-        Toast.makeText(this, "PerformLoginGoogle...", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "Login Process...", Toast.LENGTH_SHORT).show()
 
         val credentialManager = CredentialManager.create(this)
 
@@ -191,7 +189,6 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun handleSignInGoogle(res: GetCredentialResponse) {
-        Toast.makeText(this, "handleSigninGoogle...", Toast.LENGTH_SHORT).show()
         when (val credential = res.credential) {
             is CustomCredential -> {
                 if (credential.type == GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
@@ -204,7 +201,6 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun firebaseAuthWithGoogle(idToken: String) {
-        Toast.makeText(this, "firebaseAuthWithGoogle...", Toast.LENGTH_SHORT).show()
         val credential = GoogleAuthProvider.getCredential(idToken, null)
         FirebaseAuth.getInstance().signInWithCredential(credential)
             .addOnCompleteListener(this) { task ->
@@ -214,6 +210,11 @@ class LoginActivity : AppCompatActivity() {
                     if (user != null) {
                         Toast.makeText(this, "Berhasil Login !", Toast.LENGTH_SHORT).show()
                         sessionManager.saveLoginSession(idToken, user.displayName.toString())
+                        Toast.makeText(
+                            this@LoginActivity,
+                            "Welcome, ${user.displayName.toString()}",
+                            Toast.LENGTH_SHORT
+                        ).show()
                         navigateToMain()
                     } else {
                         Toast.makeText(this, "Tidak Berhasil Login !", Toast.LENGTH_SHORT).show()

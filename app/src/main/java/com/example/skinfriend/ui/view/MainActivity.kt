@@ -69,27 +69,17 @@ class MainActivity : AppCompatActivity() {
         navView.setupWithNavController(navController)
 
         binding.fabCamera.setOnClickListener { startCameraX() }
-        setupLogoutListener()
+
     }
 
     private fun checkLoginStatus() {
         if (!sessionManager.isLoggedIn()) {
-            startActivity(Intent(this, LoginActivity::class.java))
+            navigateToLogin()
             finish()
         }
     }
 
-    private fun setupLogoutListener() {
-        binding.navView.setOnItemSelectedListener { item ->
-            if (item.itemId == R.id.navigation_profile) {
-                sessionManager.clearSession()
-                navigateToLogin()
-                true
-            } else {
-                false
-            }
-        }
-    }
+
 
     private fun startCameraX() {
         val intent = Intent(this, CameraActivity::class.java)
