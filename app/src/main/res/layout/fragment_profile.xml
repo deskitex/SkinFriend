@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFF7F5">
@@ -19,12 +20,13 @@
             android:padding="16dp">
 
             <TextView
+                android:id="@+id/tv_user_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
-                android:text="Hai Reynold"
                 android:textColor="@android:color/white"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                tools:text="Hai Reynold"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -45,37 +47,38 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:gravity="center"
-                android:orientation="vertical">
+                android:orientation="horizontal"
+                android:gravity="center_vertical"> <!-- Center the contents vertically -->
 
-                <!-- Profile Picture -->
-                <ImageView
+                <!-- CircleImageView -->
+                <de.hdodenhof.circleimageview.CircleImageView
                     android:layout_width="80dp"
                     android:layout_height="80dp"
-                    android:backgroundTint="#FF775E"
-                    android:gravity="center"
-                    android:src="@drawable/loginbkg" />
+                    android:src="@drawable/icon_nav_history"
+                    android:layout_marginEnd="16dp" /> <!-- Margin between image and text -->
 
                 <!-- Name -->
-                <TextView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:text="Reynold"
-                    android:textColor="#5E1E15"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Reynold"
+                        android:textColor="#5E1E15"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Test"
+                        android:textColor="#5E1E15"
+                        android:textSize="12sp"
+                        android:textStyle="normal" />
 
-                <!-- Streak Info -->
-                <!--                <TextView-->
-                <!--                    android:layout_width="wrap_content"-->
-                <!--                    android:layout_height="wrap_content"-->
-                <!--                    android:layout_marginTop="4dp"-->
-                <!--                    android:drawableStart="@drawable/ic_check_circle"-->
-                <!--                    android:drawablePadding="4dp"-->
-                <!--                    android:text="10 Hari Beruntun"-->
-                <!--                    android:textColor="#5E1E15"-->
-                <!--                    android:textSize="14sp" />-->
+                </LinearLayout>
+
             </LinearLayout>
 
             <!-- Profile Section -->
@@ -97,6 +100,7 @@
 
                 <!-- Riwayat Pemeriksaan -->
                 <LinearLayout
+                    android:id="@+id/btn_history"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="?selectableItemBackground"
@@ -120,8 +124,8 @@
                         android:textSize="14sp" />
                 </LinearLayout>
 
-                <!-- Rekomendasi Skincare -->
                 <LinearLayout
+                    android:id="@+id/btn_rekomendation"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="?selectableItemBackground"

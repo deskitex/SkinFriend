@@ -134,12 +134,14 @@ dependencies {
 
     // Credential Manager
     implementation ("androidx.credentials:credentials:1.3.0")
-//    implementation("androidx.credentials:credentials:1.5.0-alpha05")
     implementation(libs.androidx.credentials.play.services.auth)
     implementation(libs.googleid)
     //Firebase
     implementation(platform(libs.firebase.bom))
     implementation(libs.play.services.auth)
     implementation(libs.google.firebase.auth)
+
+    //ImageCircular
+    implementation ("de.hdodenhof:circleimageview:3.1.0")
 
 }
