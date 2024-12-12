@@ -1,6 +1,8 @@
 package com.example.skinfriend.ui.view
 
 import android.content.Intent
+import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -9,7 +11,8 @@ import android.view.Surface
 import android.view.WindowInsets
 import android.view.WindowManager
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
@@ -17,18 +20,23 @@ import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import com.example.skinfriend.R
 import com.example.skinfriend.databinding.ActivityCameraBinding
+import com.example.skinfriend.ui.model.RecomendationViewModel
+import com.example.skinfriend.ui.model.ViewModelFactory
+import com.example.skinfriend.util.*
+import com.yalantis.ucrop.UCrop
+import java.io.File
 
 class CameraActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCameraBinding
     private var cameraSelector: CameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
     private var imageCapture: ImageCapture? = null
 
+    private var currentImageUri: Uri? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
 
         binding = ActivityCameraBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -39,6 +47,7 @@ class CameraActivity : AppCompatActivity() {
                 else CameraSelector.DEFAULT_BACK_CAMERA
             startCamera()
         }
+        //Menekan tombol capture akan menjalankan fungsi takePhoto
         binding.captureImage.setOnClickListener { takePhoto() }
     }
 
@@ -49,6 +58,7 @@ class CameraActivity : AppCompatActivity() {
     }
 
     private fun startCamera() {
+
         val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
 
         cameraProviderFuture.addListener({
@@ -94,9 +104,10 @@ class CameraActivity : AppCompatActivity() {
             object : ImageCapture.OnImageSavedCallback {
                 override fun onImageSaved(output: ImageCapture.OutputFileResults) {
                     val intent = Intent()
-                    intent.putExtra(EXTRA_CAMERAX_IMAGE, output.savedUri.toString())
+                    val getUri = output.savedUri
                     setResult(CAMERAX_RESULT, intent)
-                    finish()
+                    //Setelah mendapatkan uri photo menjalankan fungsi start crop
+                    getUri?.let { startCrop(it) }
                 }
 
                 override fun onError(exc: ImageCaptureException) {
@@ -124,33 +135,47 @@ class CameraActivity : AppCompatActivity() {
         supportActionBar?.hide()
     }
 
-    private val orientationEventListener by lazy {
-        object : OrientationEventListener(this) {
-            override fun onOrientationChanged(orientation: Int) {
-                if (orientation == ORIENTATION_UNKNOWN) {
-                    return
-                }
+    private fun startCrop(uri: Uri) {
+        Log.d(TAG, "Starting crop with URI: $uri")
 
-                val rotation = when (orientation) {
-                    in 45 until 135 -> Surface.ROTATION_270
-                    in 135 until 225 -> Surface.ROTATION_180
-                    in 225 until 315 -> Surface.ROTATION_90
-                    else -> Surface.ROTATION_0
-                }
+        val fileName = "croppedImage_${System.currentTimeMillis()}.jpg"
+        val destinationUri = Uri.fromFile(File(this.cacheDir, fileName))
+        val options = UCrop.Options()
+        options.setCompressionFormat(Bitmap.CompressFormat.JPEG)
+        options.setCompressionQuality(100)
+        val uCrop = UCrop.of(uri, destinationUri)
+            .withAspectRatio(1f, 1f)
+            .withMaxResultSize(1080, 1080)
+            .withOptions(options)
+        val cropIntent = uCrop.getIntent(this)
+        cropResultLauncher.launch(cropIntent)
 
-                imageCapture?.targetRotation = rotation
+        Log.d("currentImage", "$currentImageUri")
+    }
+
+    private val cropResultLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        Log.d(TAG, "startCamera")
+
+        if (result.resultCode == RESULT_OK) {
+            val resultUri = UCrop.getOutput(result.data!!)
+            resultUri?.let {
+                // Mengirim Image Uri ke Result Activity
+                val intent = Intent(this, ResultActivity::class.java).apply {
+                    putExtra(ResultActivity.IMAGE_RESULT, it.toString())
+                }
+                startActivity(intent)
+                finish()
+            }
+        } else if (result.resultCode == UCrop.RESULT_ERROR) {
+            Log.d(TAG, "Crop Error: ")
+
+            val cropError = UCrop.getError(result.data!!)
+            cropError?.let {
+                showToast(this, "Crop error: ${it.message}")
             }
         }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        orientationEventListener.enable()
-    }
-
-    override fun onStop() {
-        super.onStop()
-        orientationEventListener.disable()
     }
 
     companion object {
