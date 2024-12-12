@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "119416210380",
+    "project_id": "capstone-skinfriend",
+    "storage_bucket": "capstone-skinfriend.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:119416210380:android:f188855ddeab3163b81369",
+        "android_client_info": {
+          "package_name": "com.example.skinfriend"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "119416210380-19aek9hr1q0aqlc1sc2in0grnm8gqklv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.skinfriend",
+            "certificate_hash": "6291001dad7f62ac583a1cae992d8acab1b6e942"
+          }
+        },
+        {
+          "client_id": "119416210380-b197q9htkd41u8rq50pp9k4dufkb05ui.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDhu3NaiQlpBYbgAzmf_NZEUb-IR8ym24A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "119416210380-4g0tugvuodhkts2rrtnhumnh3dco9amh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

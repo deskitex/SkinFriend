@@ -4,16 +4,47 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import com.example.skinfriend.BuildConfig
 import java.util.concurrent.TimeUnit
+
+class ApiConfig {
+
+    companion object {
+        @Volatile
+        private var retrofitInstance: ApiService? = null
+
+        fun getAuthService(): ApiService {
+            return retrofitInstance ?: synchronized(this) {
+                val loggingInterceptor = if (BuildConfig.DEBUG) {
+                    HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
+                } else {
+                    HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.NONE)
+                }
+
+                val client = OkHttpClient.Builder()
+                    .addInterceptor(loggingInterceptor)
+                    .build()
+
+                val retrofit = Retrofit.Builder()
+                    .baseUrl(BuildConfig.BASE_URL)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .client(client)
+                    .build()
+
+                retrofitInstance = retrofit.create(ApiService::class.java)
+                retrofitInstance!!
+            }
+        }
+
 
 object ApiConfig {
     fun getApiServiceML(): ApiService {
         val loggingInterceptor =
             HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
         val client = OkHttpClient.Builder()
-            .connectTimeout(30, TimeUnit.SECONDS) // Waktu koneksi
-            .readTimeout(30, TimeUnit.SECONDS)    // Waktu membaca respons
-            .writeTimeout(30, TimeUnit.SECONDS)   // Waktu menulis data
+            .connectTimeout(30, TimeUnit.SECONDS)
+            .readTimeout(30, TimeUnit.SECONDS)
+            .writeTimeout(30, TimeUnit.SECONDS)
             .addInterceptor(loggingInterceptor)
             .build()
         val retrofit = Retrofit.Builder()
@@ -28,9 +59,9 @@ object ApiConfig {
         val loggingInterceptor =
             HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
         val client = OkHttpClient.Builder()
-            .connectTimeout(30, TimeUnit.SECONDS) // Waktu koneksi
-            .readTimeout(30, TimeUnit.SECONDS)    // Waktu membaca respons
-            .writeTimeout(30, TimeUnit.SECONDS)   // Waktu menulis data
+            .connectTimeout(30, TimeUnit.SECONDS)
+            .readTimeout(30, TimeUnit.SECONDS)
+            .writeTimeout(30, TimeUnit.SECONDS)
             .addInterceptor(loggingInterceptor)
             .build()
         val retrofit = Retrofit.Builder()

@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     id("com.google.devtools.ksp")
+    alias(libs.plugins.google.gms.google.services)
     id("kotlin-parcelize")
 }
 
@@ -12,11 +13,22 @@ android {
     defaultConfig {
         applicationId = "com.example.skinfriend"
         minSdk = 24
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField(
+            "String",
+            "BASE_URL",
+            "\"https://capstone-skinfriend.et.r.appspot.com/api/\"",
+        )
+        buildConfigField(
+            "String",
+            "WEB_CLIENT_ID",
+            "\"119416210380-b197q9htkd41u8rq50pp9k4dufkb05ui.apps.googleusercontent.com\"",
+
+            )
 
         buildConfigField("String", "API_KEY", "\"${project.findProperty("API_KEY")}\"")
     }
@@ -112,7 +124,24 @@ dependencies {
     implementation("androidx.camera:camera-camera2:1.3.0")
     implementation("androidx.camera:camera-lifecycle:1.3.0")
     implementation("androidx.camera:camera-view:1.3.0")
+    
+//Material Design :
+    implementation("com.google.android.material:material:1.9.0")
 
+    // Firebase Authentication
+    implementation(libs.firebase.auth)
+
+    // Credential Manager
+    implementation ("androidx.credentials:credentials:1.3.0")
+    implementation(libs.androidx.credentials.play.services.auth)
+    implementation(libs.googleid)
+    //Firebase
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.play.services.auth)
+    implementation(libs.google.firebase.auth)
+
+    //ImageCircular
+    implementation ("de.hdodenhof:circleimageview:3.1.0")
     //UCrop
     implementation("com.github.yalantis:ucrop:2.2.9-native")
 

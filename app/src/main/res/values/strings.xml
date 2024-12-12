@@ -1,4 +1,5 @@
 <resources>
+    <string name="web_client_id">119416210380-b197q9htkd41u8rq50pp9k4dufkb05ui.apps.googleusercontent.com</string>
     <string name="app_name">SkinFriend</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
@@ -10,4 +11,20 @@
     <string name="profile">Profile</string>
     <string name="thumbnail">Thumbnail</string>
     <string name="kenali_kondisi_stressmu">Kenali Kondisi Stressmu</string>
+    <string name="label_name">Full Name</string>
+    <string name="label_email">Email</string>
+    <string name="label_password">Password</string>
+    <string name="text_login">Login</string>
+    <string name="login_with_google">Login with Google</string>
+    <string name="noRegister">Not yet registered? Register Now</string>
+    <string name="haveAccount">Alredy have Account? Login Now</string>
+    <string name="text_register">Register</string>
+    <string name="label_confirmPassword">Confirm Password</string>
+    <string name="label_gender">Gender</string>
+    <string name="labe_phoneNumber">Phone Number</string>
+
+    <string-array name="gender_list">
+        <item>Male</item>
+        <item>Female</item>
+    </string-array>
 </resources>

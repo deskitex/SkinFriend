@@ -27,5 +27,12 @@
         android:id="@+id/navigation_profile"
         android:name="com.example.skinfriend.ui.view.fragment.ProfileFragment"
         android:label="@string/profile"
-        tools:layout="@layout/fragment_profile" />
+        tools:layout="@layout/fragment_profile">
+        <action
+            android:id="@+id/action_profileFragment_to_historyFragment"
+            app:destination="@id/navigation_history" />
+        <action
+            android:id="@+id/action_profileFragment_to_rekomendationFragment"
+            app:destination="@id/navigation_favorite" />
+    </fragment>
 </navigation>

@@ -9,8 +9,20 @@ import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
 import retrofit2.http.Query
+import retrofit2.http.Body
 
 interface ApiService {
+  
+    @POST("register")
+    fun register(
+        @Body registerRequest: RegisterRequest
+    ): Call<RegisterResponse>
+
+    @POST("login")
+    fun loginUser(
+        @Body request: LoginRequest
+    ): Call<LoginResponse>
+  
     @Multipart
     @POST("predict")
     suspend fun uploadImage(

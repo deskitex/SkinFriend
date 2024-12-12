@@ -1,16 +1,317 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container_fragment_profile"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.view.fragment.ProfileFragment">
+    android:background="#FFF7F5">
 
-    <ImageView
-        android:id="@+id/imageView"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_header"
+            android:gravity="left"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <TextView
+                android:id="@+id/tv_user_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                tools:text="Hai Reynold"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:lineSpacingExtra="4dp"
+                android:text="Kenali kulit wajahmu\nuntuk wajah yang cerah dan sehat"
+                android:textColor="@android:color/white"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"> <!-- Center the contents vertically -->
+
+                <!-- CircleImageView -->
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:src="@drawable/skinfriend_logo"
+                    android:layout_marginEnd="16dp" />
+
+                <!-- Name -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Reynold"
+                        android:textColor="#5E1E15"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Test"
+                        android:textColor="#5E1E15"
+                        android:textSize="12sp"
+                        android:textStyle="normal" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- Profile Section -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="8dp"
+                android:text="Profil"
+                android:textColor="#5E1E15"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <!-- Profile Options -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+<!--                <androidx.cardview.widget.CardView-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    app:cardElevation="4dp"-->
+<!--                    app:cardBackgroundColor="@color/white"-->
+<!--                    app:cardUseCompatPadding="true"-->
+<!--                    android:layout_margin="8dp">-->
+
+<!--                    <Button-->
+<!--                        style="@style/Widget.Material3.Button.TextButton.Icon"-->
+<!--                        android:id="@+id/btn_historyCheck"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:textSize="14sp"-->
+<!--                        android:textStyle="normal"-->
+<!--                        android:textColor="@color/primary_text"-->
+<!--                        android:textAlignment="textStart"-->
+<!--                        android:background="@drawable/button_border"-->
+<!--                        android:text="History Check"-->
+<!--                        app:iconSize="16dp"-->
+<!--                        app:icon="@drawable/icon_scan"-->
+<!--                        app:iconPadding="10dp"-->
+<!--                        app:iconTint="@color/primary_text"-->
+<!--                        app:iconGravity="textStart" />-->
+<!--                </androidx.cardview.widget.CardView>-->
+
+                <Button
+                    style="@style/Widget.Material3.Button.TextButton.Icon"
+                    android:id="@+id/btn_historyCheck"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:textStyle="normal"
+                    android:textColor="@color/primary_text"
+                    android:textAlignment="textStart"
+                    android:background="@drawable/button_border"
+                    android:text="History Check"
+                    app:iconSize="16dp"
+                    app:icon="@drawable/icon_scan"
+                    app:iconPadding="10dp"
+                    app:iconTint="@color/primary_text"
+                    app:iconGravity="textStart" />
+
+
+                <!-- Riwayat Pemeriksaan -->
+                <LinearLayout
+                    android:id="@+id/btn_history"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?selectableItemBackground"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="12dp">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/icon_nav_history"
+                        app:tint="#5E1E15" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:layout_weight="1"
+                        android:text="Riwayat Pemeriksaan"
+                        android:textColor="#5E1E15"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/btn_rekomendation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?selectableItemBackground"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="12dp">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/icon_nav_history"
+                        app:tint="#5E1E15" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:layout_weight="1"
+                        android:text="Rekomendasi Skincare"
+                        android:textColor="#5E1E15"
+                        android:textSize="14sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Settings Section -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="8dp"
+                android:text="Pengaturan"
+                android:textColor="#5E1E15"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <!-- Settings Options -->
+            <!--            <LinearLayout-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:orientation="vertical">-->
+
+            <!--                &lt;!&ndash; Akun &ndash;&gt;-->
+            <!--                <LinearLayout-->
+            <!--                    android:layout_width="match_parent"-->
+            <!--                    android:layout_height="wrap_content"-->
+            <!--                    android:background="?selectableItemBackground"-->
+            <!--                    android:gravity="center_vertical"-->
+            <!--                    android:orientation="horizontal"-->
+            <!--                    android:padding="12dp">-->
+
+            <!--                    <ImageView-->
+            <!--                        android:layout_width="24dp"-->
+            <!--                        android:layout_height="24dp"-->
+            <!--                        android:src="@drawable/ic_account"-->
+            <!--                        android:tint="#5E1E15" />-->
+
+            <!--                    <TextView-->
+            <!--                        android:layout_width="0dp"-->
+            <!--                        android:layout_height="wrap_content"-->
+            <!--                        android:layout_marginStart="12dp"-->
+            <!--                        android:layout_weight="1"-->
+            <!--                        android:text="Akun"-->
+            <!--                        android:textColor="#5E1E15"-->
+            <!--                        android:textSize="14sp" />-->
+            <!--                </LinearLayout>-->
+
+            <!-- Notifikasi -->
+            <!--                <LinearLayout-->
+            <!--                    android:layout_width="match_parent"-->
+            <!--                    android:layout_height="wrap_content"-->
+            <!--                    android:background="?selectableItemBackground"-->
+            <!--                    android:gravity="center_vertical"-->
+            <!--                    android:orientation="horizontal"-->
+            <!--                    android:padding="12dp">-->
+
+            <!--                    <ImageView-->
+            <!--                        android:layout_width="24dp"-->
+            <!--                        android:layout_height="24dp"-->
+            <!--                        android:src="@drawable/ic_notifications"-->
+            <!--                        android:tint="#5E1E15" />-->
+
+            <!--                    <TextView-->
+            <!--                        android:layout_width="0dp"-->
+            <!--                        android:layout_height="wrap_content"-->
+            <!--                        android:layout_marginStart="12dp"-->
+            <!--                        android:layout_weight="1"-->
+            <!--                        android:text="Notifikasi"-->
+            <!--                        android:textColor="#5E1E15"-->
+            <!--                        android:textSize="14sp" />-->
+            <!--                </LinearLayout>-->
+
+            <!-- Setelan -->
+            <!--                <LinearLayout-->
+            <!--                    android:layout_width="match_parent"-->
+            <!--                    android:layout_height="wrap_content"-->
+            <!--                    android:background="?selectableItemBackground"-->
+            <!--                    android:gravity="center_vertical"-->
+            <!--                    android:orientation="horizontal"-->
+            <!--                    android:padding="12dp">-->
+
+            <!--                    <ImageView-->
+            <!--                        android:layout_width="24dp"-->
+            <!--                        android:layout_height="24dp"-->
+            <!--                        android:src="@drawable/ic_settings"-->
+            <!--                        app:tint="#5E1E15" />-->
+
+            <!--                    <TextView-->
+            <!--                        android:layout_width="0dp"-->
+            <!--                        android:layout_height="wrap_content"-->
+            <!--                        android:layout_marginStart="12dp"-->
+            <!--                        android:layout_weight="1"-->
+            <!--                        android:text="Setelan"-->
+            <!--                        android:textColor="#5E1E15"-->
+            <!--                        android:textSize="14sp" />-->
+            <!--                </LinearLayout>-->
+
+            <LinearLayout
+                android:id="@+id/btn_logout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?selectableItemBackground"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="12dp"
+                android:clickable="true">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/icon_logout"
+                    app:tint="#5E1E15" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_weight="1"
+                    android:text="Longout"
+                    android:textColor="#5E1E15"
+                    android:textSize="14sp" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>
+
