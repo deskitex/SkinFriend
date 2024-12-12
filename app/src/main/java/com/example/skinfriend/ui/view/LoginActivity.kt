@@ -7,13 +7,12 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.credentials.CredentialManager
+import androidx.core.widget.addTextChangedListener
 import androidx.credentials.CustomCredential
-import androidx.credentials.GetCredentialRequest
 import androidx.credentials.GetCredentialResponse
-import androidx.credentials.exceptions.GetCredentialException
 import androidx.lifecycle.lifecycleScope
 import com.example.skinfriend.BuildConfig
+import com.example.skinfriend.R
 import com.example.skinfriend.data.remote.response.LoginRequest
 import com.example.skinfriend.data.remote.response.LoginResponse
 import com.example.skinfriend.data.remote.retrofit.ApiConfig
@@ -29,15 +28,12 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLoginBinding
     private lateinit var sessionManager: SessionManager
 
-    private val authService: ApiService by lazy {
-        ApiConfig.getAuthService()
-    }
+    private val authService: ApiService by lazy { ApiConfig.getAuthService() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,190 +45,174 @@ class LoginActivity : AppCompatActivity() {
 
         sessionManager = SessionManager(this)
 
-        if (sessionManager.isLoggedIn()) {
-            navigateToMain()
-//            return
-        }
+        if (sessionManager.isLoggedIn()) navigateToMain()
 
-        setupLogin()
+        setupUI()
+        observeFields()
     }
 
-    private fun setupLogin() {
-        binding.btnLogin.setOnClickListener {
-            val email = binding.etEmail.text.toString()
-            val password = binding.etPassword.text.toString()
+    private fun setupUI() {
+        binding.btnLogin.setOnClickListener { handleLoginClick() }
+        binding.btnLoginGoogle.setOnClickListener { performLoginGoogle() }
+        binding.registerText.setOnClickListener { navigateToRegister() }
+    }
 
-            binding.emailContainer.error = null
-            binding.passwordContainer.error = null
-
-            if (email.isEmpty()) {
-                binding.emailContainer.error = "Email harus terisi!"
-            } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-                binding.emailContainer.error = "Format email tidak valid!"
-            }
-
-            if (password.isEmpty()) {
-                binding.passwordContainer.error = "Password harus terisi!"
-            }
-
-            if (binding.emailContainer.error == null && binding.passwordContainer.error == null) {
-                performLogin(email, password)
-            }
+    private fun observeFields() {
+        binding.etEmail.addTextChangedListener { text ->
+            binding.emailContainer.error = if (text.isNullOrEmpty()) {
+                "Email harus terisi!"
+            } else if (!Patterns.EMAIL_ADDRESS.matcher(text).matches()) {
+                "Format email tidak valid!"
+            } else null
         }
 
-        binding.btnLoginGoogle.setOnClickListener {
-            performLoginGoogle()
+        binding.etPassword.addTextChangedListener { text ->
+            binding.passwordContainer.error = if (text.isNullOrEmpty()) {
+                "Password harus terisi!"
+            } else null
         }
+    }
 
-        binding.registerText.setOnClickListener {
-            navigateToRegister()
+    private fun handleLoginClick() {
+        val email = binding.etEmail.text.toString()
+        val password = binding.etPassword.text.toString()
+
+        if (validateFields()) {
+            performLogin(email, password)
         }
+    }
+
+    private fun validateFields(): Boolean {
+        val email = binding.etEmail.text.toString()
+        val password = binding.etPassword.text.toString()
+
+        val isEmailValid = email.isNotEmpty() && Patterns.EMAIL_ADDRESS.matcher(email).matches()
+        val isPasswordValid = password.isNotEmpty()
+
+        return isEmailValid && isPasswordValid
     }
 
     private fun performLogin(email: String, password: String) {
-        binding.progressBar.visibility = View.VISIBLE
+        toggleLoading(isLoading = true, isGoogleLogin = false)
+
         val loginRequest = LoginRequest(email, password)
         authService.loginUser(loginRequest).enqueue(object : Callback<LoginResponse> {
             override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
-                binding.progressBar.visibility = View.GONE
+                toggleLoading(isLoading = false, isGoogleLogin = false)
                 if (response.isSuccessful) {
-                    val body = response.body()
-                    if (body != null && !body.error!!) {
-                        val loginResult = body.loginResult
-                        if (loginResult?.token != null && loginResult.name != null) {
-                            sessionManager.saveLoginSession(loginResult.token, loginResult.name)
-                            Toast.makeText(
-                                this@LoginActivity,
-                                "Welcome, ${loginResult.name}",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                            navigateToMain()
-                        } else {
-                            Toast.makeText(
-                                this@LoginActivity,
-                                "Login gagal: loginResult kosong",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-                    } else {
-                        val errorMessage =
-                            body?.message ?: "Login gagal: Tidak ada pesan kesalahan."
-                        Toast.makeText(
-                            this@LoginActivity,
-                            "Login gagal: $errorMessage",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
+                    handleLoginSuccess(response.body())
                 } else {
-                    Toast.makeText(
-                        this@LoginActivity,
-                        "Login gagal: Akun belum terdaftar",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    showToast("Login gagal: Akun belum terdaftar")
                 }
             }
 
             override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
-                binding.progressBar.visibility = View.GONE
-                Toast.makeText(
-                    this@LoginActivity,
-                    "Terjadi kesalahan: ${t.message}",
-                    Toast.LENGTH_SHORT
-                ).show()
+                toggleLoading(isLoading = false, isGoogleLogin = false)
+                showToast("Terjadi kesalahan: ${t.message}")
             }
         })
     }
 
-    private fun performLoginGoogle() {
-        Toast.makeText(this, "Login Process...", Toast.LENGTH_SHORT).show()
+    private fun handleLoginSuccess(response: LoginResponse?) {
+        response?.let {
+            if (!it.error!!) {
+                val loginResult = it.loginResult
+                if (loginResult?.token != null && loginResult.name != null) {
+                    sessionManager.saveLoginSession(loginResult.token, loginResult.name)
+                    showToast("Welcome, ${loginResult.name}")
+                    navigateToMain()
+                } else {
+                    showToast("Login gagal: loginResult kosong")
+                }
+            } else {
+                showToast(it.message ?: "Login gagal: Tidak ada pesan kesalahan.")
+            }
+        } ?: showToast("Login gagal: Response kosong.")
+    }
 
-        val credentialManager = CredentialManager.create(this)
+    private fun performLoginGoogle() {
+        toggleLoading(isLoading = true, isGoogleLogin = true)
+        val credentialManager = androidx.credentials.CredentialManager.create(this)
 
         val googleIdOption = GetGoogleIdOption.Builder()
             .setFilterByAuthorizedAccounts(false)
             .setServerClientId(BuildConfig.WEB_CLIENT_ID)
             .build()
 
-        val request = GetCredentialRequest.Builder()
+        val request = androidx.credentials.GetCredentialRequest.Builder()
             .addCredentialOption(googleIdOption)
             .build()
 
         lifecycleScope.launch {
             try {
-                val response: GetCredentialResponse = credentialManager.getCredential(
-                    context = this@LoginActivity,
-                    request = request
-                )
+                val response = credentialManager.getCredential(this@LoginActivity, request)
                 handleSignInGoogle(response)
-            } catch (e: GetCredentialException) {
-                binding.progressBar.visibility = View.GONE
-                if (e.message != null && e.message!!.contains(
-                        "activity is cancelled by the user",
-                        ignoreCase = true
-                    )
-                ) {
-                    Toast.makeText(
-                        this@LoginActivity,
-                        "Autentikasi dibatalkan oleh pengguna.",
-                        Toast.LENGTH_SHORT
-                    ).show()
+            } catch (e: androidx.credentials.exceptions.GetCredentialException) {
+                toggleLoading(isLoading = false, isGoogleLogin = true)
+                val message = e.message ?: "Terjadi kesalahan"
+                showToast(if (message.contains("activity is cancelled", true)) {
+                    "Autentikasi dibatalkan oleh pengguna."
                 } else {
-                    Toast.makeText(
-                        this@LoginActivity,
-                        "Terjadi kesalahan: ${e.message}",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
+                    "Terjadi kesalahan: $message"
+                })
             }
-
         }
     }
 
-    private fun handleSignInGoogle(res: GetCredentialResponse) {
-        when (val credential = res.credential) {
-            is CustomCredential -> {
-                if (credential.type == GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
-                    val googleIdTokenCredential =
-                        GoogleIdTokenCredential.createFrom(credential.data)
-                    firebaseAuthWithGoogle(googleIdTokenCredential.idToken)
-                }
-            }
+    private fun handleSignInGoogle(response: GetCredentialResponse) {
+        val credential = response.credential
+        if (credential is CustomCredential &&
+            credential.type == GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL
+        ) {
+            val googleIdTokenCredential = GoogleIdTokenCredential.createFrom(credential.data)
+            firebaseAuthWithGoogle(googleIdTokenCredential.idToken)
         }
     }
 
     private fun firebaseAuthWithGoogle(idToken: String) {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
-        FirebaseAuth.getInstance().signInWithCredential(credential)
-            .addOnCompleteListener(this) { task ->
-                if (task.isSuccessful) {
-                    binding.progressBar.visibility = View.GONE
-                    val user = FirebaseAuth.getInstance().currentUser
-                    if (user != null) {
-                        Toast.makeText(this, "Berhasil Login !", Toast.LENGTH_SHORT).show()
-                        sessionManager.saveLoginSession(idToken, user.displayName.toString())
-                        Toast.makeText(
-                            this@LoginActivity,
-                            "Welcome, ${user.displayName.toString()}",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        navigateToMain()
-                    } else {
-                        Toast.makeText(this, "Tidak Berhasil Login !", Toast.LENGTH_SHORT).show()
-                        finish()
-                    }
+        FirebaseAuth.getInstance().signInWithCredential(credential).addOnCompleteListener { task ->
+            toggleLoading(isLoading = false, isGoogleLogin = true)
+            if (task.isSuccessful) {
+                val user = FirebaseAuth.getInstance().currentUser
+                if (user != null) {
+                    sessionManager.saveLoginSession(idToken, user.displayName.orEmpty())
+                    showToast("Welcome, ${user.displayName}")
+                    navigateToMain()
+                } else {
+                    showToast("Tidak Berhasil Login!")
                 }
+            } else {
+                showToast("Gagal login dengan Google.")
             }
+        }
+    }
+
+    private fun toggleLoading(isLoading: Boolean, isGoogleLogin: Boolean) {
+        if (isGoogleLogin) {
+            binding.btnLoginGoogle.isEnabled = !isLoading
+            binding.loginGoogleLoading.visibility = if (isLoading) View.VISIBLE else View.GONE
+            binding.tvLoginGoogle.visibility = if (isLoading) View.GONE else View.VISIBLE
+        } else {
+            binding.btnLogin.isEnabled = !isLoading
+            binding.loginLoading.visibility = if (isLoading) View.VISIBLE else View.GONE
+            binding.tvLogin.visibility = if (isLoading) View.GONE else View.VISIBLE
+        }
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
     private fun navigateToMain() {
-        val intent = Intent(this@LoginActivity, MainActivity::class.java)
+        val intent = Intent(this, MainActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
         finish()
     }
 
     private fun navigateToRegister() {
-        val intent = Intent(this, RegisterActivity::class.java)
-        startActivity(intent)
+        startActivity(Intent(this, RegisterActivity::class.java))
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
     }
 }

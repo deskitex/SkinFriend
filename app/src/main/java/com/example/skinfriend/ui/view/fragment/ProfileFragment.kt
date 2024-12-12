@@ -40,11 +40,11 @@ class ProfileFragment : Fragment() {
         }
 
         binding.btnHistory.setOnClickListener {
-            findNavController().navigate(R.id.action_profileFragment_to_historyFragment)
+            findNavController().navigate(R.id.navigation_history)
         }
 
         binding.btnRekomendation.setOnClickListener {
-            findNavController().navigate(R.id.action_profileFragment_to_rekomendationFragment)
+            findNavController().navigate(R.id.navigation_favorite)
         }
     }
 

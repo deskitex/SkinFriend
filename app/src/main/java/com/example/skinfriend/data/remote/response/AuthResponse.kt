@@ -5,17 +5,20 @@ import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 data class RegisterRequest(
-    val name: String,
+    val nama: String,
     val email: String,
-    val password: String
+    val password: String,
+    val noTelp: String,
+    val gender: String,
 )
+
 data class RegisterResponse(
 
     @field:SerializedName("error")
-    val error: Boolean? = null,
+    val error: Boolean?,
 
     @field:SerializedName("message")
-    val message: String? = null,
+    val message: String?,
 
     @field:SerializedName("userId")
     val userId: String? = null

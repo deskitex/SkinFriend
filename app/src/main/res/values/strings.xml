@@ -19,4 +19,12 @@
     <string name="noRegister">Not yet registered? Register Now</string>
     <string name="haveAccount">Alredy have Account? Login Now</string>
     <string name="text_register">Register</string>
+    <string name="label_confirmPassword">Confirm Password</string>
+    <string name="label_gender">Gender</string>
+    <string name="labe_phoneNumber">Phone Number</string>
+
+    <string-array name="gender_list">
+        <item>Male</item>
+        <item>Female</item>
+    </string-array>
 </resources>
