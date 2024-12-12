@@ -1,6 +1,7 @@
 package com.example.skinfriend.ui.view
 
 import android.Manifest
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -9,6 +10,7 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.navigation.findNavController
@@ -39,8 +41,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun allPermissionsGranted() =
         ContextCompat.checkSelfPermission(
-            this,
-            REQUIRED_PERMISSION
+           this,
+            Manifest.permission.CAMERA
         ) == PackageManager.PERMISSION_GRANTED
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,10 +53,6 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        if (!allPermissionsGranted()) {
-            requestPermissionLauncher.launch(REQUIRED_PERMISSION)
-        }
 
         val navView: BottomNavigationView = binding.navView
         navView.background = null
@@ -84,7 +82,12 @@ class MainActivity : AppCompatActivity() {
 
     private fun startCameraX() {
         val intent = Intent(this, CameraActivity::class.java)
-        launcherIntentCameraX.launch(intent)
+        if (!allPermissionsGranted()) {
+            requestPermissionLauncher.launch(Manifest.permission.CAMERA)
+        } else{
+            launcherIntentCameraX.launch(intent)
+
+        }
     }
 
     private val launcherIntentCameraX = registerForActivityResult(
@@ -105,4 +108,6 @@ class MainActivity : AppCompatActivity() {
     companion object {
         private const val REQUIRED_PERMISSION = Manifest.permission.CAMERA
     }
+}
+
 }

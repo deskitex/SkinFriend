@@ -22,7 +22,6 @@ android {
             "String",
             "BASE_URL",
             "\"https://capstone-skinfriend.et.r.appspot.com/api/\"",
-
         )
         buildConfigField(
             "String",
@@ -30,6 +29,8 @@ android {
             "\"119416210380-b197q9htkd41u8rq50pp9k4dufkb05ui.apps.googleusercontent.com\"",
 
             )
+
+        buildConfigField("String", "API_KEY", "\"${project.findProperty("API_KEY")}\"")
     }
 
     buildTypes {
@@ -123,11 +124,9 @@ dependencies {
     implementation("androidx.camera:camera-camera2:1.3.0")
     implementation("androidx.camera:camera-lifecycle:1.3.0")
     implementation("androidx.camera:camera-view:1.3.0")
-
-
+    
 //Material Design :
     implementation("com.google.android.material:material:1.9.0")
-
 
     // Firebase Authentication
     implementation(libs.firebase.auth)
@@ -143,5 +142,7 @@ dependencies {
 
     //ImageCircular
     implementation ("de.hdodenhof:circleimageview:3.1.0")
+    //UCrop
+    implementation("com.github.yalantis:ucrop:2.2.9-native")
 
 }

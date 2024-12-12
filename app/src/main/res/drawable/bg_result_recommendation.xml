@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Shadow -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#50121212"/> <!-- Warna shadow (hitam transparan) -->
+        </shape>
+    </item>
+    <!-- Background -->
+    <item android:bottom="1dp">
+        <shape android:shape="rectangle">
+            <solid android:color="@android:color/white"/> <!-- Warna latar belakang -->
+        </shape>
+    </item>
+</layer-list>
+

@@ -1,14 +1,9 @@
-package com.example.skinfriend.ui.view
+package com.example.skinfriend.util
 
-import android.content.ContentValues
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
-import android.os.Build
-import android.os.Environment
-import android.provider.MediaStore
-import androidx.core.content.FileProvider
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
@@ -41,7 +36,7 @@ fun createCustomTempFile(context: Context): File {
 fun File.reduceFileImage(): File {
     val file = this
     val bitmap = BitmapFactory.decodeFile(file.path)
-    var compressQuality = 100
+    var compressQuality = 80
     var streamLength: Int
     do {
         val bmpStream = ByteArrayOutputStream()
@@ -53,3 +48,4 @@ fun File.reduceFileImage(): File {
     bitmap?.compress(Bitmap.CompressFormat.JPEG, compressQuality, FileOutputStream(file))
     return file
 }
+

@@ -33,6 +33,17 @@
             android:exported="true"
             android:windowSoftInputMode="adjustPan" />
         <activity
+            android:name=".ui.view.QuizActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.view.DrinkActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.yalantis.ucrop.UCropActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+      
+        <activity
             android:name=".ui.view.CameraActivity"
             android:exported="false" />
         <activity
