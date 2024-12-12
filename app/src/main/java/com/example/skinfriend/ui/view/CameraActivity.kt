@@ -1,4 +1,3 @@
-// CameraActivity.kt
 package com.example.skinfriend.ui.view
 
 import android.Manifest
@@ -98,7 +97,7 @@ class CameraActivity : AppCompatActivity() {
     private fun takePhoto() {
         val imageCapture = imageCapture ?: return
 
-        val photoFile: File = createCustomTempFile(application) // Create temporary file
+        val photoFile: File = createCustomTempFile(application)
 
         val outputOptions = ImageCapture.OutputFileOptions.Builder(photoFile).build()
 
@@ -108,9 +107,8 @@ class CameraActivity : AppCompatActivity() {
             object : ImageCapture.OnImageSavedCallback {
                 override fun onImageSaved(output: ImageCapture.OutputFileResults) {
                     try {
-                        val fixedFile = photoFile.fixImageRotation().reduceFileImage() // Perbaiki orientasi dan kompres gambar
+                        val fixedFile = photoFile.fixImageRotation().reduceFileImage()
 
-                        // Simpan gambar ke lokal storage
                         val contentValues = ContentValues().apply {
                             put(MediaStore.Images.Media.DISPLAY_NAME, "IMG_${System.currentTimeMillis()}.jpg")
                             put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
@@ -123,7 +121,6 @@ class CameraActivity : AppCompatActivity() {
                             }
                         }
 
-                        // Kirim file untuk prediksi
                         val intent = Intent(this@CameraActivity, PredictActivity::class.java)
                         intent.putExtra("image_uri", fixedFile.toURI().toString())
                         startActivity(intent)

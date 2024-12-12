@@ -39,18 +39,12 @@ class PredictActivity : AppCompatActivity() {
         val imageView: ImageView = binding.imagePreview
         imageView.setImageURI(Uri.parse(imageUri))
 
-        // Unggah gambar ke API untuk prediksi
         uploadImage(file)
     }
 
     private fun uploadImage(file: File) {
-        // Membuat requestBody untuk file gambar
         val requestBody = RequestBody.create("image/jpeg".toMediaTypeOrNull(), file)
-
-        // Membuat multipart form part untuk file
         val part = MultipartBody.Part.createFormData("file", file.name, requestBody)
-
-        // Menggunakan Retrofit untuk mengirimkan data ke API
         ApiConfig.getPredicttService().predictImage(part).enqueue(object : Callback<ResponseBody> {
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                 runOnUiThread {
@@ -64,7 +58,6 @@ class PredictActivity : AppCompatActivity() {
                     val responseBody = response.body()?.string()
                     Log.d("PredictActivity", "Response: $responseBody")
                     runOnUiThread {
-                        // Tampilkan hasil prediksi di UI
                         binding.textViewResponse.text = responseBody ?: "No response data"
                     }
                 } else {
