@@ -20,10 +20,16 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField(
             "String",
-            "BASE_URL",
+            "BASE_URL_AUTH",
             "\"https://capstone-skinfriend.et.r.appspot.com/api/\"",
 
-        )
+            )
+        buildConfigField(
+            "String",
+            "BASE_URL_PREDICT",
+            "\"https://skincare-recom-api-119416210380.asia-southeast2.run.app/\"",
+
+            )
         buildConfigField(
             "String",
             "WEB_CLIENT_ID",

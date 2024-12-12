@@ -25,7 +25,30 @@ class ApiConfig {
                     .build()
 
                 val retrofit = Retrofit.Builder()
-                    .baseUrl(BuildConfig.BASE_URL)
+                    .baseUrl(BuildConfig.BASE_URL_AUTH)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .client(client)
+                    .build()
+
+                retrofitInstance = retrofit.create(ApiService::class.java)
+                retrofitInstance!!
+            }
+        }
+
+        fun getPredicttService(): ApiService {
+            return retrofitInstance ?: synchronized(this) {
+                val loggingInterceptor = if (BuildConfig.DEBUG) {
+                    HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
+                } else {
+                    HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.NONE)
+                }
+
+                val client = OkHttpClient.Builder()
+                    .addInterceptor(loggingInterceptor)
+                    .build()
+
+                val retrofit = Retrofit.Builder()
+                    .baseUrl(BuildConfig.BASE_URL_PREDICT)
                     .addConverterFactory(GsonConverterFactory.create())
                     .client(client)
                     .build()

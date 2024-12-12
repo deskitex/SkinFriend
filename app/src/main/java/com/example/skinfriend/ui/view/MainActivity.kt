@@ -66,12 +66,10 @@ class MainActivity : AppCompatActivity() {
             )
         )
 
-
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
         binding.fabCamera.setOnClickListener { startCameraX() }
-
     }
 
     private fun checkLoginStatus() {
@@ -79,8 +77,6 @@ class MainActivity : AppCompatActivity() {
             navigateToLogin()
         }
     }
-
-
 
     private fun startCameraX() {
         val intent = Intent(this, CameraActivity::class.java)
@@ -92,6 +88,15 @@ class MainActivity : AppCompatActivity() {
     ) {
         if (it.resultCode == CAMERAX_RESULT) {
             currentImageUri = it.data?.getStringExtra(CameraActivity.EXTRA_CAMERAX_IMAGE)?.toUri()
+            handleCapturedImage(currentImageUri)
+        }
+    }
+
+    private fun handleCapturedImage(uri: Uri?) {
+        if (uri != null) {
+            Toast.makeText(this, "Image saved at: $uri", Toast.LENGTH_LONG).show()
+        } else {
+            Toast.makeText(this, "Failed to capture image", Toast.LENGTH_SHORT).show()
         }
     }
 
