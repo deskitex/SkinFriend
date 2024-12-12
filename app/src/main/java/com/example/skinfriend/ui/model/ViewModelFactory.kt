@@ -24,7 +24,11 @@ class ViewModelFactory private constructor(
             instance ?: synchronized(this) {
                 instance ?: ViewModelFactory(
                     mapOf(
-                        CameraViewModel::class.java to { CameraViewModel(Injection.provideSkincareRepository(context)) }
+                        RecomendationViewModel::class.java to { RecomendationViewModel(Injection.provideRecommendationRepository()) },
+                        HistoryViewModel::class.java to { HistoryViewModel(Injection.provideHistoryRepository(context)) },
+                        FavoriteViewModel::class.java to { FavoriteViewModel(Injection.provideFavoriteRepository(context)) },
+                        NewsViewModel::class.java to { NewsViewModel(Injection.provideNewsRepository(context)) },
+                        HomeViewModel::class.java to { HomeViewModel(Injection.provideUserRepository(context)) },
                     )
                 )
             }.also { instance = it }

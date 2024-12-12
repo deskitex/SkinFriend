@@ -40,8 +40,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun allPermissionsGranted() =
         ContextCompat.checkSelfPermission(
-            this,
-            REQUIRED_PERMISSION
+           this,
+            Manifest.permission.CAMERA
         ) == PackageManager.PERMISSION_GRANTED
 
 
@@ -69,9 +69,11 @@ class MainActivity : AppCompatActivity() {
     private fun startCameraX() {
         val intent = Intent(this, CameraActivity::class.java)
         if (!allPermissionsGranted()) {
-            requestPermissionLauncher.launch(REQUIRED_PERMISSION)
+            requestPermissionLauncher.launch(Manifest.permission.CAMERA)
+        } else{
+            launcherIntentCameraX.launch(intent)
+
         }
-        launcherIntentCameraX.launch(intent)
     }
 
     private val launcherIntentCameraX = registerForActivityResult(
@@ -81,15 +83,4 @@ class MainActivity : AppCompatActivity() {
             currentImageUri = it.data?.getStringExtra(CameraActivity.EXTRA_CAMERAX_IMAGE)?.toUri()
         }
     }
-
-
-
-    companion object {
-        private const val REQUIRED_PERMISSION = Manifest.permission.CAMERA
-
-        fun showToast(context: Context, message: String) {
-            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
-        }
-    }
-
 }

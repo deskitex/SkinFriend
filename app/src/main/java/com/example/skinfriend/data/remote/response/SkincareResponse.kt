@@ -47,5 +47,7 @@ data class RecommendationsItem(
 	val brand: String,
 
 	@field:SerializedName("product_name")
-	val productName: String
+	val productName: String,
+
+	val isFavorite: Boolean
 )

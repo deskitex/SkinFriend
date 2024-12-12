@@ -36,7 +36,7 @@ fun createCustomTempFile(context: Context): File {
 fun File.reduceFileImage(): File {
     val file = this
     val bitmap = BitmapFactory.decodeFile(file.path)
-    var compressQuality = 100
+    var compressQuality = 80
     var streamLength: Int
     do {
         val bmpStream = ByteArrayOutputStream()
@@ -48,3 +48,4 @@ fun File.reduceFileImage(): File {
     bitmap?.compress(Bitmap.CompressFormat.JPEG, compressQuality, FileOutputStream(file))
     return file
 }
+

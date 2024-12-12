@@ -11,7 +11,6 @@ import android.view.Surface
 import android.view.WindowInsets
 import android.view.WindowManager
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -20,11 +19,9 @@ import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.viewModels
 import com.example.skinfriend.databinding.ActivityCameraBinding
-import com.example.skinfriend.ui.model.CameraViewModel
+import com.example.skinfriend.ui.model.RecomendationViewModel
 import com.example.skinfriend.ui.model.ViewModelFactory
 import com.example.skinfriend.util.*
 import com.yalantis.ucrop.UCrop
@@ -36,10 +33,6 @@ class CameraActivity : AppCompatActivity() {
     private var imageCapture: ImageCapture? = null
 
     private var currentImageUri: Uri? = null
-
-    private val cameraViewModel: CameraViewModel by viewModels() {
-        ViewModelFactory.getInstance(this)
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -142,35 +135,6 @@ class CameraActivity : AppCompatActivity() {
         supportActionBar?.hide()
     }
 
-    private val orientationEventListener by lazy {
-        object : OrientationEventListener(this) {
-            override fun onOrientationChanged(orientation: Int) {
-                if (orientation == ORIENTATION_UNKNOWN) {
-                    return
-                }
-
-                val rotation = when (orientation) {
-                    in 45 until 135 -> Surface.ROTATION_270
-                    in 135 until 225 -> Surface.ROTATION_180
-                    in 225 until 315 -> Surface.ROTATION_90
-                    else -> Surface.ROTATION_0
-                }
-
-                imageCapture?.targetRotation = rotation
-            }
-        }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        orientationEventListener.enable()
-    }
-
-    override fun onStop() {
-        super.onStop()
-        orientationEventListener.disable()
-    }
-
     private fun startCrop(uri: Uri) {
         Log.d(TAG, "Starting crop with URI: $uri")
 
@@ -197,26 +161,19 @@ class CameraActivity : AppCompatActivity() {
         if (result.resultCode == RESULT_OK) {
             val resultUri = UCrop.getOutput(result.data!!)
             resultUri?.let {
-                //Setelah berhasil crop jalankan fungsi upload image dari uri hasil crop
-                cameraViewModel.uploadImage(it, this)
-                cameraViewModel.predictionResult.observe(this){ predictions->
-                    predictions?.let {
-                        val intent = Intent(this, ResultActivity::class.java).apply {
-                            putExtra(ResultActivity.OILY_RESULT, "${it.oily}")
-                            putExtra(ResultActivity.SENSITIVE_RESULT, "${it.sensitive}")
-                            putExtra(ResultActivity.DRY_RESULT, "${it.dry}")
-                            putExtra(ResultActivity.NORMAL_RESULT, "${it.normal}")
-                        }
-                        startActivity(intent)
-                    }
+                // Mengirim Image Uri ke Result Activity
+                val intent = Intent(this, ResultActivity::class.java).apply {
+                    putExtra(ResultActivity.IMAGE_RESULT, it.toString())
                 }
+                startActivity(intent)
+                finish()
             }
         } else if (result.resultCode == UCrop.RESULT_ERROR) {
             Log.d(TAG, "Crop Error: ")
 
             val cropError = UCrop.getError(result.data!!)
             cropError?.let {
-                MainActivity.showToast(this, "Crop error: ${it.message}")
+                showToast(this, "Crop error: ${it.message}")
             }
         }
     }
