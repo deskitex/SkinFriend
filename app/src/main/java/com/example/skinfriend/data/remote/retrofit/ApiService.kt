@@ -1,6 +1,10 @@
 package com.example.skinfriend.data.remote.retrofit
 
+import com.example.skinfriend.data.remote.response.LoginRequest
+import com.example.skinfriend.data.remote.response.LoginResponse
 import com.example.skinfriend.data.remote.response.NewsResponse
+import com.example.skinfriend.data.remote.response.RegisterRequest
+import com.example.skinfriend.data.remote.response.RegisterResponse
 import com.example.skinfriend.data.remote.response.SkincareResponse
 import okhttp3.MultipartBody
 import retrofit2.Call

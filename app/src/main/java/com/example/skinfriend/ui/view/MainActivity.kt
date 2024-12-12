@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun allPermissionsGranted() =
         ContextCompat.checkSelfPermission(
-           this,
+            this,
             Manifest.permission.CAMERA
         ) == PackageManager.PERMISSION_GRANTED
 
@@ -60,7 +60,10 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
         val appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.navigation_home, R.id.navigation_history, R.id.navigation_favorite, R.id.navigation_profile
+                R.id.navigation_home,
+                R.id.navigation_history,
+                R.id.navigation_favorite,
+                R.id.navigation_profile
             )
         )
 
@@ -79,12 +82,11 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-
     private fun startCameraX() {
         val intent = Intent(this, CameraActivity::class.java)
         if (!allPermissionsGranted()) {
             requestPermissionLauncher.launch(Manifest.permission.CAMERA)
-        } else{
+        } else {
             launcherIntentCameraX.launch(intent)
 
         }
@@ -110,4 +112,3 @@ class MainActivity : AppCompatActivity() {
     }
 }
 
-}
