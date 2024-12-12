@@ -22,6 +22,8 @@
     <string name="label_confirmPassword">Confirm Password</string>
     <string name="label_gender">Gender</string>
     <string name="labe_phoneNumber">Phone Number</string>
+    <string name="guide_camera">Arahkan Wajah Kamu ke Kamera</string>
+    <string name="label_scanFace">Scan Face</string>
 
     <string-array name="gender_list">
         <item>Male</item>
