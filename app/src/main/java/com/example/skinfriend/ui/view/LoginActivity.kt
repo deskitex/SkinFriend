@@ -2,6 +2,7 @@ package com.example.skinfriend.ui.view
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.util.Patterns
 import android.view.View
 import android.widget.Toast
@@ -117,6 +118,7 @@ class LoginActivity : AppCompatActivity() {
         response?.let {
             if (!it.error!!) {
                 val loginResult = it.loginResult
+                Log.d("Login", "Data $loginResult")
                 if (loginResult?.token != null && loginResult.name != null) {
                     sessionManager.saveLoginSession(loginResult.token, loginResult.name)
                     showToast("Welcome, ${loginResult.name}")
