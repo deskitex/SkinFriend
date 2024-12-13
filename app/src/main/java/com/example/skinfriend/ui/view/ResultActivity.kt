@@ -2,17 +2,18 @@ package com.example.skinfriend.ui.view
 
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.example.skinfriend.R
 import com.example.skinfriend.data.local.entity.FavoriteEntity
 import com.example.skinfriend.data.local.entity.HistoryEntity
 import com.example.skinfriend.data.local.entity.RecommendationEntity
-import com.example.skinfriend.data.remote.response.RecommendationsItem
 import com.example.skinfriend.databinding.ActivityResultBinding
 import com.example.skinfriend.ui.model.FavoriteViewModel
 import com.example.skinfriend.ui.model.HistoryViewModel
@@ -21,6 +22,7 @@ import com.example.skinfriend.ui.model.ViewModelFactory
 import com.example.skinfriend.ui.view.fragment.adapter.RecommendationAdapter
 import com.example.skinfriend.util.getDate
 import com.example.skinfriend.util.setupRecyclerView
+import kotlinx.coroutines.launch
 
 class ResultActivity : AppCompatActivity() {
 
@@ -32,14 +34,11 @@ class ResultActivity : AppCompatActivity() {
     private val historyViewModel: HistoryViewModel by viewModels {
         ViewModelFactory.getInstance(this)
     }
-
     private val favoriteViewModel: FavoriteViewModel by viewModels {
         ViewModelFactory.getInstance(this)
     }
 
     private var isProcessingFavorite = false
-
-
     private lateinit var favoriteEntity: FavoriteEntity
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,22 +63,25 @@ class ResultActivity : AppCompatActivity() {
         }
 
         val recommendationAdapter = RecommendationAdapter(object : RecommendationAdapter.OnButtonClickListener{
-            override fun onButtonClicked(item: RecommendationsItem) {
+            override fun onButtonClicked(item: RecommendationEntity) {
                 toggleFavorite(item)
             }
         })
 
         favoriteViewModel.getFavorite().observe(this) { favorites ->
-            recomendationViewModel.recommendationResult.observe(this) { recommendations ->
-                val updatedRecommendations = recommendations.map { item ->
-                    item.copy(
-                        isFavorite = favorites.any { it.productName == item.productName }
-                    )
+            historyViewModel.getHistory().observe(this) { historyList ->
+                historyList.lastOrNull()?.let { lastHistory ->
+                    historyViewModel.getHistoryWithRecommendationsLive(lastHistory.id).observe(this) { historyWithRecommendations ->
+                        val updatedRecommendations = historyWithRecommendations.recommendations.map { item ->
+                            item.copy(
+                                isFavorite = favorites.any { it.productName == item.productName }
+                            )
+                        }
+                        recommendationAdapter.submitList(updatedRecommendations)
+                    }
                 }
-                recommendationAdapter.submitList(updatedRecommendations)
             }
         }
-
 
         setupRecyclerView(
             binding.rvRecom,
@@ -120,23 +122,31 @@ class ResultActivity : AppCompatActivity() {
                             date = getDate(),
                             isHistory = true
                         )
-                        historyViewModel.insertHistory(listOf(historyEntity))
+                        lifecycleScope.launch {
+                            val historyId = historyViewModel.insertHistory(historyEntity)
+                            recomendationViewModel.recommendationResult.observe(this@ResultActivity) { recommendation ->
+                                val recommendationEntity = recommendation.map { item ->
+                                    RecommendationEntity(
+                                        productName = item.productName,
+                                        price = item.price,
+                                        pictureSrc = item.pictureSrc,
+                                        notableEffects = item.notableEffects,
+                                        productHref = item.productHref,
+                                        historyId = historyId.toInt()
+                                    )
+                                }
+
+                                historyViewModel.insertRecommendation(recommendationEntity)
+                            }
+                        }
                     }
                 }
             }
-        }
-        recomendationViewModel.skintypeResult.observe(this) {
-            binding.skintypeResult.text = it[0]
-        }
-
-        recomendationViewModel.recommendationResult.observe(this) {
-
         }
     }
 
     private fun displayHistoryData(history: HistoryEntity) {
         with(binding) {
-            // Tampilkan data dari HistoryEntity ke UI
             Glide.with(this@ResultActivity)
                 .load(history.imageUri)
                 .into(previewImage)
@@ -148,13 +158,12 @@ class ResultActivity : AppCompatActivity() {
         }
     }
 
-    private fun toggleFavorite(item: RecommendationsItem) {
+    private fun toggleFavorite(item: RecommendationEntity) {
         if (isProcessingFavorite) return
 
         isProcessingFavorite = true
         val productName = item.productName
 
-        // Check favorite status synchronously and toggle
         favoriteViewModel.isFavoriteSync(productName) { isFavorite ->
             if (isFavorite) {
                 removeFromFavorite(item)
@@ -165,7 +174,7 @@ class ResultActivity : AppCompatActivity() {
         }
     }
 
-    private fun saveToFavorite(item: RecommendationsItem) {
+    private fun saveToFavorite(item: RecommendationEntity) {
         val notableEffects = item.notableEffects.split(", ")
         val favoriteEntity = FavoriteEntity(
             productName = item.productName,
@@ -176,12 +185,10 @@ class ResultActivity : AppCompatActivity() {
             price = item.price,
             productHref = item.productHref,
         )
-        // Memanggil ViewModel untuk menyimpan data ke database
         favoriteViewModel.insertFavorite(favoriteEntity)
     }
 
-    private fun removeFromFavorite(item: RecommendationsItem) {
-        // Memanggil ViewModel untuk menghapus data berdasarkan productName
+    private fun removeFromFavorite(item: RecommendationEntity) {
         favoriteViewModel.deleteFavorite(item.productName)
     }
 

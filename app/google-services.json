@@ -22,6 +22,14 @@
           }
         },
         {
+          "client_id": "119416210380-4q0jhhtbou8i6bdf0mdke6j2il6v4kma.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.skinfriend",
+            "certificate_hash": "8076429aa909096eda48652c1defd03c1f4616a3"
+          }
+        },
+        {
           "client_id": "119416210380-b197q9htkd41u8rq50pp9k4dufkb05ui.apps.googleusercontent.com",
           "client_type": 3
         }
