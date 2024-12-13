@@ -2,6 +2,7 @@ package com.example.skinfriend.ui.view
 
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -21,6 +22,7 @@ import com.example.skinfriend.ui.model.ViewModelFactory
 import com.example.skinfriend.ui.view.fragment.adapter.RecommendationAdapter
 import com.example.skinfriend.util.getDate
 import com.example.skinfriend.util.setupRecyclerView
+import kotlin.math.round
 
 class ResultActivity : AppCompatActivity() {
 
@@ -103,23 +105,24 @@ class ResultActivity : AppCompatActivity() {
         recomendationViewModel.predictionResult.observe(this) { predictions ->
             predictions?.let {
                 with(binding) {
-                    oilyResult.text = it.oily.toString()
-                    dryResult.text = it.dry.toString()
-                    sensitiveResult.text = it.sensitive.toString()
-                    normalResult.text = it.normal.toString()
+                    oilyResult.text = round(it.oily).toString()
+                    dryResult.text = round(it.dry).toString()
+                    sensitiveResult.text = round(it.sensitive).toString()
+                    normalResult.text = round(it.normal).toString()
 
                     recomendationViewModel.skintypeResult.observe(this@ResultActivity) { skintype ->
                         skintypeResult.text = skintype[0]
                         val historyEntity = HistoryEntity(
                             skintype = skintype[0],
-                            oily = it.oily.toString(),
-                            dry = it.dry.toString(),
-                            sensitive = it.sensitive.toString(),
-                            normal = it.normal.toString(),
+                            oily = round(it.oily).toString(),
+                            dry = round(it.dry).toString(),
+                            sensitive = round(it.sensitive).toString(),
+                            normal = round(it.normal).toString(),
                             imageUri = uri.toString(),
                             date = getDate(),
                             isHistory = true
                         )
+                        Log.d("Result", round(it.oily).toString())
                         historyViewModel.insertHistory(listOf(historyEntity))
                     }
                 }

@@ -18,7 +18,9 @@
             android:background="@drawable/bg_header"
             android:gravity="left"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:paddingTop="48dp"
+            android:paddingHorizontal="24dp"
+            android:paddingBottom="24dp">
 
             <TextView
                 android:id="@+id/tv_user_name"
@@ -63,13 +65,15 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
                     <TextView
+                        android:id="@+id/tv_nameProfile"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Reynold"
+                        tools:text="Reynold"
                         android:textColor="#5E1E15"
                         android:textSize="18sp"
                         android:textStyle="bold" />
                     <TextView
+                        android:id="@+id/tv_email"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Test"
@@ -90,13 +94,15 @@
                 android:text="Profil"
                 android:textColor="#5E1E15"
                 android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:paddingHorizontal="12dp"/>
 
             <!-- Profile Options -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:paddingHorizontal="12dp">
 
 <!--                <androidx.cardview.widget.CardView-->
 <!--                    android:layout_width="match_parent"-->
@@ -124,22 +130,22 @@
 <!--                        app:iconGravity="textStart" />-->
 <!--                </androidx.cardview.widget.CardView>-->
 
-                <Button
-                    style="@style/Widget.Material3.Button.TextButton.Icon"
-                    android:id="@+id/btn_historyCheck"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="14sp"
-                    android:textStyle="normal"
-                    android:textColor="@color/primary_text"
-                    android:textAlignment="textStart"
-                    android:background="@drawable/button_border"
-                    android:text="History Check"
-                    app:iconSize="16dp"
-                    app:icon="@drawable/icon_scan"
-                    app:iconPadding="10dp"
-                    app:iconTint="@color/primary_text"
-                    app:iconGravity="textStart" />
+<!--                <Button-->
+<!--                    style="@style/Widget.Material3.Button.TextButton.Icon"-->
+<!--                    android:id="@+id/btn_historyCheck"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:textSize="14sp"-->
+<!--                    android:textStyle="normal"-->
+<!--                    android:textColor="@color/primary_text"-->
+<!--                    android:textAlignment="textStart"-->
+<!--                    android:background="@drawable/button_border"-->
+<!--                    android:text="History Check"-->
+<!--                    app:iconSize="16dp"-->
+<!--                    app:icon="@drawable/icon_scan"-->
+<!--                    app:iconPadding="10dp"-->
+<!--                    app:iconTint="@color/primary_text"-->
+<!--                    app:iconGravity="textStart" />-->
 
 
                 <!-- Riwayat Pemeriksaan -->
@@ -155,7 +161,7 @@
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:src="@drawable/icon_nav_history"
+                        android:src="@drawable/icon_scan"
                         app:tint="#5E1E15" />
 
                     <TextView
@@ -203,7 +209,8 @@
                 android:text="Pengaturan"
                 android:textColor="#5E1E15"
                 android:textSize="16sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:paddingHorizontal="12dp"/>
 
             <!-- Settings Options -->
             <!--            <LinearLayout-->
@@ -293,14 +300,14 @@
                 android:background="?selectableItemBackground"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:padding="12dp"
+                android:paddingHorizontal="24dp"
                 android:clickable="true">
 
                 <ImageView
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:src="@drawable/icon_logout"
-                    app:tint="#5E1E15" />
+                    app:tint="#5E1E15"/>
 
                 <TextView
                     android:layout_width="0dp"

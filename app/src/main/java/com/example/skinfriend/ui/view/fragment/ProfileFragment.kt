@@ -6,7 +6,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.findNavController
 import com.example.skinfriend.R
 import com.example.skinfriend.databinding.FragmentProfileBinding
@@ -31,8 +30,6 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        (requireActivity() as AppCompatActivity).supportActionBar?.hide()
-
         sessionManager = SessionManager(requireContext())
 
         binding.btnLogout.setOnClickListener {
@@ -46,6 +43,11 @@ class ProfileFragment : Fragment() {
         binding.btnRekomendation.setOnClickListener {
             findNavController().navigate(R.id.navigation_favorite)
         }
+
+        binding.tvUserName.text = "Hai ${sessionManager.getUserName()}"
+        binding.tvNameProfile.text = "${sessionManager.getUserName()}"
+        binding.tvEmail.text = "${sessionManager.getUserEmail()}"
+
     }
 
     private fun setupLogoutListener() {
@@ -53,12 +55,6 @@ class ProfileFragment : Fragment() {
         val intent = Intent(requireContext(), LoginActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-        (requireActivity() as AppCompatActivity).supportActionBar?.show()
     }
 }
 

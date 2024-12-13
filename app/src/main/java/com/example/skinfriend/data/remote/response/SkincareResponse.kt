@@ -17,16 +17,16 @@ data class SkincareResponse(
 data class Predictions(
 
 	@field:SerializedName("Oily")
-	val oily: Any,
+	val oily: Double,
 
 	@field:SerializedName("Sensitive")
-	val sensitive: Any,
+	val sensitive: Double,
 
 	@field:SerializedName("Dry")
-	val dry: Any,
+	val dry: Double,
 
 	@field:SerializedName("Normal")
-	val normal: Any
+	val normal: Double
 )
 
 data class RecommendationsItem(

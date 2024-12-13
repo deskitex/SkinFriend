@@ -100,7 +100,7 @@ class LoginActivity : AppCompatActivity() {
             override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
                 toggleLoading(isLoading = false, isGoogleLogin = false)
                 if (response.isSuccessful) {
-                    handleLoginSuccess(response.body())
+                    handleLoginSuccess(response.body(), email)
                 } else {
                     showToast("Login gagal: Akun belum terdaftar")
                 }
@@ -113,12 +113,12 @@ class LoginActivity : AppCompatActivity() {
         })
     }
 
-    private fun handleLoginSuccess(response: LoginResponse?) {
+    private fun handleLoginSuccess(response: LoginResponse?, email: String) {
         response?.let {
             if (!it.error!!) {
                 val loginResult = it.loginResult
                 if (loginResult?.token != null && loginResult.name != null) {
-                    sessionManager.saveLoginSession(loginResult.token, loginResult.name)
+                    sessionManager.saveLoginSession(loginResult.token, loginResult.name, email)
                     showToast("Welcome, ${loginResult.name}")
                     navigateToMain()
                 } else {
@@ -176,7 +176,7 @@ class LoginActivity : AppCompatActivity() {
             if (task.isSuccessful) {
                 val user = FirebaseAuth.getInstance().currentUser
                 if (user != null) {
-                    sessionManager.saveLoginSession(idToken, user.displayName.orEmpty())
+                    sessionManager.saveLoginSession(idToken, user.displayName.orEmpty(), user.email.orEmpty())
                     showToast("Welcome, ${user.displayName}")
                     navigateToMain()
                 } else {
