@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
@@ -44,6 +45,8 @@ class ResultActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+        supportActionBar?.hide()
         binding = ActivityResultBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -140,7 +143,6 @@ class ResultActivity : AppCompatActivity() {
                                 historyViewModel.insertRecommendation(recommendationEntity)
                             }
                         }
-                        historyViewModel.insertHistory(listOf(historyEntity))
                     }
                 }
             }

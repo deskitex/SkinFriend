@@ -75,6 +75,8 @@ class MainActivity : AppCompatActivity() {
 
         binding.fabCamera.setOnClickListener { startCameraX() }
 
+        binding.tvUserName.text = "Hai ${sessionManager.getUserName()}"
+
     }
 
     private fun checkLoginStatus() {
