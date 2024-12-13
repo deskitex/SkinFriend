@@ -5,7 +5,7 @@ import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 data class RegisterRequest(
-    val nama: String,
+    val name: String,
     val email: String,
     val password: String,
     val noTelp: String,

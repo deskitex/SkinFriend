@@ -2,6 +2,7 @@ package com.example.skinfriend.helper
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.provider.ContactsContract.CommonDataKinds.Email
 
 class SessionManager(context: Context) {
 
@@ -11,13 +12,15 @@ class SessionManager(context: Context) {
         private const val KEY_IS_LOGGED_IN = "is_loged_in"
         private const val KEY_TOKEN = "auth_token"
         private const val KEY_USER_NAME = "username"
+        private const val KEY_USER_EMAIL = "email"
     }
 
-    fun saveLoginSession(token: String, userName: String) {
+    fun saveLoginSession(token: String, userName: String, email: String) {
         preferences.edit().apply{
             putBoolean(KEY_IS_LOGGED_IN, true)
             putString(KEY_TOKEN, token)
             putString(KEY_USER_NAME, userName)
+            putString(KEY_USER_EMAIL, email)
             apply()
         }
     }
@@ -41,5 +44,9 @@ class SessionManager(context: Context) {
 
     fun getUserName(): String? {
         return preferences.getString(KEY_USER_NAME, null)
+    }
+
+    fun getUserEmail(): String? {
+        return preferences.getString(KEY_USER_EMAIL, null)
     }
 }

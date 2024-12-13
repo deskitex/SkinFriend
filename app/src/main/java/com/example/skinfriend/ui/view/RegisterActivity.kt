@@ -181,7 +181,7 @@ class RegisterActivity : AppCompatActivity() {
     ) {
         Log.d("Data","Data $name $email $phoneNumber $gender $password")
         toggleLoading(true)
-        val registerRequest = RegisterRequest(nama = name, email = email, noTelp =  phoneNumber, gender = gender, password =  password)
+        val registerRequest = RegisterRequest(name = name, email = email, noTelp =  phoneNumber, gender = gender, password =  password)
         authService.register(registerRequest).enqueue(object : Callback<RegisterResponse> {
             override fun onResponse(
                 call: Call<RegisterResponse>, response: Response<RegisterResponse>
