@@ -17,11 +17,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.skinfriend.R
 import com.example.skinfriend.data.local.entity.FavoriteEntity
-import com.example.skinfriend.data.remote.response.RecommendationsItem
+import com.example.skinfriend.data.local.entity.RecommendationEntity
 import com.example.skinfriend.databinding.ListRecommendationBinding
 
 class RecommendationAdapter(private val onButtonClickListener: OnButtonClickListener) :
-    ListAdapter<RecommendationsItem, RecommendationAdapter.MyViewHolders>(DIFF_CALLBACK) {
+    ListAdapter<RecommendationEntity, RecommendationAdapter.MyViewHolders>(DIFF_CALLBACK) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolders {
         val binding = ListRecommendationBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return MyViewHolders(binding)
@@ -34,7 +34,7 @@ class RecommendationAdapter(private val onButtonClickListener: OnButtonClickList
 
     inner class MyViewHolders(val binding: ListRecommendationBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: RecommendationsItem) {
+        fun bind(item: RecommendationEntity) {
             with(binding){
                 scName.text = item.productName
                 scPrice.text = item.price
@@ -74,19 +74,19 @@ class RecommendationAdapter(private val onButtonClickListener: OnButtonClickList
         }
     }
     companion object {
-        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<RecommendationsItem>() {
-            override fun areItemsTheSame(oldItem: RecommendationsItem, newItem: RecommendationsItem): Boolean {
+        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<RecommendationEntity>() {
+            override fun areItemsTheSame(oldItem: RecommendationEntity, newItem: RecommendationEntity): Boolean {
                 return oldItem.productName == newItem.productName
             }
 
             @SuppressLint("DiffUtilEquals")
-            override fun areContentsTheSame(oldItem: RecommendationsItem, newItem: RecommendationsItem): Boolean {
+            override fun areContentsTheSame(oldItem: RecommendationEntity, newItem: RecommendationEntity): Boolean {
                 return oldItem == newItem
             }
         }
     }
 
     interface OnButtonClickListener {
-        fun onButtonClicked(item: RecommendationsItem)
+        fun onButtonClicked(item: RecommendationEntity)
     }
 }
